@@ -3,3 +3,4 @@ from django.http import HttpResponse
 
 def homePageView(request):
     return HttpResponse('Testing Basic setup DONE')
+
