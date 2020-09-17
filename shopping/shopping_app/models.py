@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from multiselectfield import MultiSelectField
+
 import os
 # Create your models here.
 CATEGORY_CHOICES = (
@@ -13,6 +15,13 @@ CATEGORY_CHOICES = (
 ADMIN_CHOICES = (
     ("admin","admin"),
 )
+
+SIZE_CHOICES = (
+    ("S","S"),
+    ("M","M"),
+    ("L","L"),
+    ("XL","XL"),
+)
 # declaring a Category Model
 class ProductInfo(models.Model):
     category = models.CharField(
@@ -24,12 +33,17 @@ class ProductInfo(models.Model):
     uploaded_by = models.CharField(
         max_length=20,
         choices=ADMIN_CHOICES,
-        default='Women'
+        default='admin'
     )
     uploaded_at = models.DateField(default=timezone.now)
+    size = MultiSelectField(
+        choices=SIZE_CHOICES,
+        default= 'S'
+    )
+    price = models.IntegerField(help_text="Please specify price in $",default=0)
 
     def __str__(self):
-        return self.product_title + ",Category : "+self.category
+        return self.product_title + ", Category : "+self.category
 
 class DataUpload(models.Model):
     product_info = models.ForeignKey(ProductInfo, on_delete=models.CASCADE)
