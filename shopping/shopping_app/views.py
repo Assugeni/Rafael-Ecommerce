@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import CATEGORY_CHOICES
 
 def homePageView(request):
     return render(request,'site/index.html')
