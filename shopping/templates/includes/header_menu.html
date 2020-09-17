@@ -1,0 +1,13 @@
+{% load custom_filters %}
+
+<nav class="header__menu">
+    <ul>
+        <li {% ifequal page 'Home' %} class="active"{% endifequal %}><a href="/">Home</a></li>
+
+        {% for category in ""|get_categories %}
+            <li {% ifequal page category %} class="active"{% endifequal %}>
+                <a href="/category_details/?category={{category}}">{{category}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>

@@ -1,5 +1,10 @@
 {% extends 'base/skeleton.html' %}
 {% load static %}
+
+{% block header_menu %}
+      {% include 'includes/header_menu.html' with page=category %}
+{% endblock %}
+
 {% block content %}
 
     <!-- Breadcrumb Begin -->

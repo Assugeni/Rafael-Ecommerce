@@ -14,3 +14,8 @@ def get_first_image(category,title):
 @register.filter
 def encode_space(title):
     return title.replace(" ","%20")
+
+@register.filter
+def get_categories(title):
+    path = os.path.join(BASE_DIR, 'media')
+    return os.listdir(path=path)
