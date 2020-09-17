@@ -8,72 +8,27 @@
                 <div class="accordion" id="accordionExample">
                     <div class="card">
                         <div class="card-heading active">
-                            <a data-toggle="collapse" data-target="#collapseOne">Women</a>
-                        </div>
-                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <ul>
-                                    <li><a href="#">Coats</a></li>
-                                </ul>
-                            </div>
+                            <a href="/category_details?category=Women">Women</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-heading">
-                            <a data-toggle="collapse" data-target="#collapseTwo">Men</a>
-                        </div>
-                        <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <ul>
-                                    <li><a href="#">Coats</a></li>
-                                </ul>
-                            </div>
+                            <a href="/category_details/?category=Men">Men</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-heading">
-                            <a data-toggle="collapse" data-target="#collapseThree">Kids</a>
-                        </div>
-                        <div id="collapseThree" class="collapse" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <ul>
-                                    <li><a href="#">Coats</a></li>
-                                </ul>
-                            </div>
+                            <a href="/category_details/?category=Kids">Kids</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-heading">
-                            <a data-toggle="collapse" data-target="#collapseFour">Accessories</a>
-                        </div>
-                        <div id="collapseFour" class="collapse" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <ul>
-                                    <li><a href="#">Coats</a></li>
-                                    <li><a href="#">Jackets</a></li>
-                                    <li><a href="#">Dresses</a></li>
-                                    <li><a href="#">Shirts</a></li>
-                                    <li><a href="#">T-shirts</a></li>
-                                    <li><a href="#">Jeans</a></li>
-                                </ul>
-                            </div>
+                            <a href="/category_details/?category=Accessories">Accessories</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-heading">
-                            <a data-toggle="collapse" data-target="#collapseFive">Cosmetic</a>
-                        </div>
-                        <div id="collapseFive" class="collapse" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <ul>
-                                    <li><a href="#">Coats</a></li>
-                                    <li><a href="#">Jackets</a></li>
-                                    <li><a href="#">Dresses</a></li>
-                                    <li><a href="#">Shirts</a></li>
-                                    <li><a href="#">T-shirts</a></li>
-                                    <li><a href="#">Jeans</a></li>
-                                </ul>
-                            </div>
+                            <a href="/category_details/?category=Cosmetics">Cosmetic</a>
                         </div>
                     </div>
                 </div>
@@ -101,11 +56,13 @@
                 <h4>Shop by size</h4>
             </div>
             <div class="size__list">
-                <label for="xxs">
-                    xxs
-                    <input type="checkbox" id="xxs">
+                {% for size in sizes %}
+                <label for="{{size}}">
+                    {{size}}
+                    <input type="checkbox" id="{{size}}">
                     <span class="checkmark"></span>
                 </label>
+                {% endfor %}
             </div>
         </div>
 

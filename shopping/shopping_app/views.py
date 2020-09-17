@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import CATEGORY_CHOICES,ProductInfo,DataUpload
+from .models import ProductInfo
 
 def homePageView(request):
     return render(request,'site/index.html')
@@ -10,9 +10,13 @@ def DetailPageView(request):
 
 def CategoryDetailPageView(request):
     category = request.GET.get('category','')
+    size_list = ['S','M','L','XL','XXL']
     if category:
-        # DataUpload.objects.filter()
-        return render(request,'site/category_detail.html')
+        category_data = ProductInfo.objects.filter(category=category)
+        return render(request,'site/category_detail.html',{'category_data':category_data,
+                                                           'category':category,
+                                                           'size_list':size_list
+                                                           })
     else:
         return HttpResponse('Category not found')
 
