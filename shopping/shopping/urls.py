@@ -19,17 +19,29 @@ from shopping_app import views
 from shopping import settings
 from django.conf.urls.static import static
 
+from allauth.account.views import SignupView, LoginView, PasswordResetView
+
+class MySignupView(SignupView):
+    template_name = 'accounts/signup.html'
+
+class MyLoginView(LoginView):
+    template_name = 'accounts/login.html'
+
+# class MyPasswordResetView(PasswordResetView):
+#     template_name = 'password_reset.html'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('product_details/',views.DetailPageView , name='product_details'),
     path('category_details/',views.CategoryDetailPageView,name='category_details'),
-    path('home/', views.homePageView, name='homepage'),
     path('cart/',views.Cart,name='cart'),
     path('checkout/',views.checkout,name='checkout'),
 
     path('', include('core.urls', namespace='core')),
+    path('accounts/login/', MyLoginView.as_view(), name='account_login'),
+    path('accounts/signup/', MySignupView.as_view(), name='account_signup'),
     path('accounts/', include('allauth.urls')),
+    path('', views.homePageView, name='homepage'),
 
 
 

@@ -1,0 +1,117 @@
+{% extends 'base/skeleton.html' %}
+{% load static %}
+{% block custom_css %}
+<style>
+ button[type=submit] {
+    background: #5e0100;
+    color: #fff;
+    padding: 9px 48px;
+    border: 1px solid #c30000;
+    font-size: larger;
+}
+
+button[type=submit]:hover {
+    background: #ca7e7e;
+}
+
+.login_part .login_part_text {
+    background-image: -moz-linear-gradient(16deg, #ff005a 0%, #ff5d2d 64%, #ffba00 100%);
+    background-image: -webkit-linear-gradient(16deg, #ff005a 0%, #ff5d2d 64%, #ffba00 100%);
+    background-image: -ms-linear-gradient(16deg, #ff005a 0%, #ff5d2d 64%, #ffba00 100%);
+    background-size: 200% auto;
+}
+
+.login_part .login_part_text, .login_part .login_part_form {
+    padding: 80px 70px;
+    height: 600px;
+    display: table;
+}
+
+.login_part .login_part_text .login_part_text_iner, .login_part .login_part_text .login_part_form_iner, .login_part .login_part_form .login_part_text_iner, .login_part .login_part_form .login_part_form_iner {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+.login_part .login_part_text h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 35px;
+    color: #fff;
+    margin-bottom: 17px;
+}
+.login_part .login_part_text p {
+    color: #fff;
+    line-height: 25px;
+}
+.login_part .login_part_text .btn_3 {
+    border: 1px solid #ffc2d2;
+    background-color: transparent;
+    font-size: 14px;
+    margin-top: 28px;
+}
+
+.btn_3 {
+    display: inline-block;
+    padding: 9px 42px;
+    border-radius: 50px;
+    background-color: #2f7dfc;
+    border: 1px solid #f4f4f4;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 400;
+    border: 1px solid #2f7dfc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+
+label{display:none;}
+
+form label[for=id_remember] {
+    display: block;
+    width: 22%;
+    float: left;
+}
+
+input#id_login,input#id_username {
+    margin-top: 28px;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+<!-- Breadcrumb Begin -->
+{% include 'includes/sub_header.html' with title='Login' %}
+<!-- Breadcrumb End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-lg-6 col-md-6 login_part">
+                    <div class="login_part_text text-center">
+                        <div class="login_part_text_iner">
+                            <h2>New to our Shop?</h2>
+                            <p>We see our customers as invited guests to a party, and we are the hosts. It’s our job every day to make every important aspect of the customer experience a little bit better.</p>
+                            {% block account_create %}
+                             <a href="/accounts/signup/" class="btn_3">Create an Account</a>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+
+            {% block account_content %}
+            {% endblock %}
+
+
+            </div>
+    </div>
+</section>
+<!-- Contact Section End -->
+
+{% endblock %}
