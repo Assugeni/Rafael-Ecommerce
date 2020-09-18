@@ -38,7 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'shopping_app'
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django_countries',
+    'crispy_forms',
+    'shopping_app',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +143,19 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Auth
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+)
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL = '/home'
+LOGOUT_REDIRECT_URL = '/home'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
+#stripe payment
+STRIPE_SECRET_KEY = 'sk_test_51HSl8HD9YThKKGg11o6y1NP7cF7uK6ufB21RthmJ6d3MqM13PNG9gQMZ9oXu8AuUCUOXovCnUsrd8XVrQlNLuNpO00lkYAcBTA'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51HSl8HD9YThKKGg1FPosqwziOW8tSDXKipWrB9Gm3GMwkNATSv0JRDvx7yeWwYMAyeHxyZmBIBQMiGBYEuP5ihMP004wJouUM5'

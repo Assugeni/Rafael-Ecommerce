@@ -81,10 +81,15 @@
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
-                        <div class="header__right__auth">
-                            <a href="#">Login</a>
-                            <a href="#">Register</a>
-                        </div>
+                         {% if user.is_authenticated %}
+                            <div class="header__right__auth">
+                                <a href="/accounts/logout">Logout</a>
+                            </div>
+                        {% else %}
+                            <div class="header__right__auth">
+                                <a href="/accounts/login">Login</a>
+                            </div>
+                        {% endif %}
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
                             <li><a href="#"><span class="icon_heart_alt"></span>
