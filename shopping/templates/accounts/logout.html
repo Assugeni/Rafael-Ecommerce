@@ -1,15 +1,18 @@
 {% extends 'base/accounts_base.html' %}
 {% load static %}
 {% block account_content %}
+
+{% block account_create %}
+{% endblock %}
  <div class="col-lg-6 col-md-6">
                     <div class="contact__content">
                         <div class="contact__form">
-                            <h2>Login</h2>
+                            <h2 style="margin-bottom:10px;">Sign Out</h2>
                             <form method="post">
                               {% csrf_token %}
                               {{ form.as_p }}
-                              <button type="submit">Login</button>
-                                <a href="/accounts/password/reset/">forgot password?</a>
+                                <p>Are you sure you want to sign out?</p>
+                              <button type="submit">Log Out</button>
                             </form>
                         </div>
                     </div>
