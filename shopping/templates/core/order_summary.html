@@ -1,0 +1,92 @@
+{% extends 'base/skeleton.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- Breadcrumb Begin -->
+    {% include 'includes/sub_header.html' with title='Shopping-Cart' %}
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Item Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total Item Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                           {% for order_item in object.items.all %}
+                              <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ order_item.product_info.product_title }}</td>
+                                <td>
+                                {% if order_item.product_info.discount_price %}
+                                    <del>${{ order_item.product_info.price}}</del>
+                                    ${{ order_item.product_info.discount_price }}
+                                {% else %}
+                                    ${{ order_item.product_info.price}}
+                                {% endif %}
+
+                                </td>
+                                <td>
+                                    <a href="/reduce-quantity-item/{{order_item.product_info.pk}}"><i class="fas fa-minus mr-2"></i></a>
+                                    {{ order_item.quantity }}
+                                    <a href="/add-to-cart/{{order_item.product_info.pk}}"><i class="fas fa-plus ml-2"></i></a>
+                                </td>
+                                <td>
+                                {% if order_item.product_info.discount_price %}
+                                    ${{ order_item.get_discount_item_price }}
+                                    <span class="badge badge-success" >Saved ${{ order_item.get_amount_saved }}</span>
+                                {% else %}
+                                    ${{ order_item.get_total_item_price}}
+                                {% endif %}
+                                 <a href="remove-from-cart/{{order_item.product_info.pk}}">
+                                    <i class="fas fa-trash float-right text-danger"></i>
+                                 </a>
+
+                                </td>
+                             </tr>
+                            {% empty %}
+        <tr>
+            <td colspan="5">Your Cart Empity</td>
+        </tr>
+
+         <tr>
+            <td colspan="5">
+                <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+            </td>
+        </tr>
+
+        {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% if object.get_total_price %}
+                <tr>
+                    <td colspan="4"><b>Total Order Price</b></td>
+                    <td>${{ object.get_total_price }}</td>
+                </tr>
+                 <tr>
+                    <td colspan="5">
+                        <a href="/checkout" class="btn btn-warning float-right ml-2">Checkout</a>
+                        <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+                    </td>
+                </tr>
+
+             {% endif %}
+
+        </div>
+    </section>
+    <!-- Shop Cart Section End -->
+
+{% endblock %}

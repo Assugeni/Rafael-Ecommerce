@@ -20,6 +20,15 @@ from shopping import settings
 from django.conf.urls.static import static
 
 from allauth.account.views import SignupView, LoginView, PasswordResetView, LogoutView
+from shopping_app.core_views import (
+    remove_from_cart,
+    reduce_quantity_item,
+    add_to_cart,
+    OrderSummaryView,
+    CheckoutView,
+    PaymentView
+)
+
 
 class MySignupView(SignupView):
     template_name = 'accounts/signup.html'
@@ -35,12 +44,19 @@ class MyLogoutView(LogoutView):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('product_details/',views.DetailPageView , name='product_details'),
+    path('product_details/<pk>/', views.ProductView.as_view(), name='product_details'),
+    path('add-to-cart/<pk>/', views.add_to_cart, name='add-to-cart'),
     path('category_details/',views.CategoryDetailPageView,name='category_details'),
     path('cart/',views.Cart,name='cart'),
-    path('checkout/',views.checkout,name='checkout'),
 
-    path('', include('core.urls', namespace='core')),
+    path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
+    path('add-to-cart/<pk>/', add_to_cart, name='add-to-cart'),
+    path('remove-from-cart/<pk>/', remove_from_cart, name='remove-from-cart'),
+    path('reduce-quantity-item/<pk>/', reduce_quantity_item, name='reduce-quantity-item'),
+
+    # path('', include('core.urls', namespace='core')),
     path('accounts/login/', MyLoginView.as_view(), name='account_login'),
     path('accounts/signup/', MySignupView.as_view(), name='account_signup'),
     path('accounts/password/reset/', MyPasswordResetView.as_view(), name='account_reset_password'),

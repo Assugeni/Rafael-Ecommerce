@@ -7,7 +7,6 @@
     <!-- Breadcrumb End -->
 
     <!-- Product Details Section Begin -->
-    {% for data in product_data %}
     <section class="product-details spad">
         <div class="container">
             <div class="row">
@@ -39,7 +38,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <h3>{{data.product_title}}<span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
+                        <h3>{{object.product_title}}<span>Brand: SKMEIMore Men Watches from SKMEI</span></h3>
                         <div class="rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -48,9 +47,16 @@
                             <i class="fa fa-star"></i>
                             <span>( 138 reviews )</span>
                         </div>
-                        <div class="product__details__price">$ 75.0 <span>$ 83.0</span></div>
-                        <p>Nemo enim ipsam voluptatem quia aspernatur aut odit aut loret fugit, sed quia consequuntur
-                        magni lores eos qui ratione voluptatem sequi nesciunt.</p>
+                        <div class="product__details__price">
+                              {% if object.discount_price %}
+                                  <del>${{ object.price }}</del>
+                                  <span>${{ object.discount_price }}</span>
+                              {% else %}
+                                 <span>${{ object.price }}</span>
+                              {% endif %}
+
+                        </div>
+                        <p>{{ object.description }}</p>
                         <div class="product__details__button">
                             <div class="quantity">
                                 <span>Quantity:</span>
@@ -58,7 +64,13 @@
                                     <input type="text" value="1">
                                 </div>
                             </div>
-                            <a href="#" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+                            <a href="{{ object.get_add_to_cart_url }}" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+
+
+
+<!--                            <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p" >Remove From cart-->
+<!--                                <i class="fas fa-trash ml-1"></i>-->
+<!--                            </a>-->
                             <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                 <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
@@ -279,6 +291,5 @@
         </div>
     </section>
     <!-- Product Details Section End -->
-    {% endfor %}
 
 {% endblock content %}
