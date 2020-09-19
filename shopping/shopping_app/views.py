@@ -5,8 +5,9 @@ from .models import ProductInfo
 def homePageView(request):
     return render(request,'site/index.html')
 
-def DetailPageView(request):
-    return render(request,'site/product-details.html')
+def DetailPageView(request,pk):
+    product_data = ProductInfo.objects.filter(id=pk)
+    return render(request,'site/product-details.html',{"product_data":product_data})
 
 def CategoryDetailPageView(request):
     category = request.GET.get('category','')

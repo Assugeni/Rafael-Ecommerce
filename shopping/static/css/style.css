@@ -976,7 +976,6 @@ ol {
 	position: absolute;
 	right: -14px;
 	top: 0;
-	content: "";
 	font-family: "FontAwesome";
 }
 
@@ -3617,4 +3616,8 @@ ol {
 		width: 100%;
 		font-size: 24px;
 	}
+}
+input#id_remember {
+    width: 16px;
+    height: 16px;
 }
