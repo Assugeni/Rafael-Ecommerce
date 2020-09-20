@@ -43,6 +43,12 @@ def checkout(request):
 
 @login_required
 def add_to_cart(request, pk):
+    """
+    Took data from product page and add it to cart page
+    :param request:
+    :param pk:
+    :return:
+    """
     product_info = get_object_or_404(ProductInfo, pk=pk )
     print(product_info)
 
