@@ -22,7 +22,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             context = {
@@ -53,9 +52,6 @@ class CheckoutView(View):
                 apartment_address = form.cleaned_data.get('apartment_address')
                 country = form.cleaned_data.get('country')
                 zip = form.cleaned_data.get('zip')
-                # TODO: add functionaly for these fields
-                # same_billing_address = form.cleaned_data.get('same_billing_address')
-                # save_info = form.cleaned_data.get('save_info')
                 payment_option = form.cleaned_data.get('payment_option')
 
                 checkout_address = CheckoutAddress(
