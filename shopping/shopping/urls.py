@@ -43,6 +43,7 @@ class MyLogoutView(LogoutView):
     template_name = 'accounts/logout.html'
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('product_details/<pk>/', views.ProductView.as_view(), name='product_details'),
     path('add-to-cart/<pk>/', views.add_to_cart, name='add-to-cart'),
@@ -56,15 +57,12 @@ urlpatterns = [
     path('remove-from-cart/<pk>/', remove_from_cart, name='remove-from-cart'),
     path('reduce-quantity-item/<pk>/', reduce_quantity_item, name='reduce-quantity-item'),
 
-    # path('', include('core.urls', namespace='core')),
     path('accounts/login/', MyLoginView.as_view(), name='account_login'),
     path('accounts/signup/', MySignupView.as_view(), name='account_signup'),
     path('accounts/password/reset/', MyPasswordResetView.as_view(), name='account_reset_password'),
     path('accounts/logout/', MyLogoutView.as_view(), name='account_logout'),
     path('accounts/', include('allauth.urls')),
     path('', views.homePageView, name='homepage'),
-
-
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 
