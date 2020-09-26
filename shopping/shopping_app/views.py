@@ -14,14 +14,9 @@ from django.contrib import messages
 def homePageView(request):
     return render(request,'site/index.html')
 
-# def DetailPageView(request,pk):
-#     product_data = ProductInfo.objects.filter(id=pk)
-#     return render(request,'site/product-details.html',{"product_data":product_data})
-
 class ProductView(DetailView):
     model = ProductInfo
     template_name = "site/product-details.html"
-
 
 def CategoryDetailPageView(request):
     category = request.GET.get('category','')
