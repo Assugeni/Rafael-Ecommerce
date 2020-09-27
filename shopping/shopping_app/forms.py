@@ -4,7 +4,6 @@ from django_countries.widgets import CountrySelectWidget
 
 PAYMENT = (
     ('S', 'Stripe'),
-    ('P', 'PayPal')
 )
 
 
