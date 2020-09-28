@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                           {% for order_item in object.items.all %}
+                           {% for order_item in object %}
                               <tr>
                                 <th scope="row">{{ forloop.counter }}</th>
                                 <td>{{ order_item.product_info.product_title }}</td>
@@ -57,23 +57,22 @@
                                 </td>
                              </tr>
                             {% empty %}
-        <tr>
-            <td colspan="5">Your Cart Empity</td>
-        </tr>
+                                <tr>
+                                    <td colspan="5">Your Cart Empity</td>
+                                </tr>
 
-         <tr>
-            <td colspan="5">
-                <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
-            </td>
-        </tr>
+                                 <tr>
+                                    <td colspan="5">
+                                        <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+                                    </td>
+                                </tr>
 
-        {% endfor %}
+                           {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            {% if object.get_total_price %}
                 <tr>
                     <td colspan="4"><b>Total Order Price</b></td>
                     <td>$ <span id="grand_total">{{object.price}}</span></td>
@@ -84,8 +83,6 @@
                         <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
                     </td>
                 </tr>
-
-             {% endif %}
 
         </div>
     </section>

@@ -23,7 +23,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
+            order = OrderItem.objects.filter(user=self.request.user, ordered=False)
             context = {
                 'object': order
             }
@@ -35,7 +35,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
 class CheckoutView(View):
     def get(self, *args, **kwargs):
         form = CheckoutForm()
-        order = Order.objects.get(user=self.request.user, ordered=False)
+        order = OrderItem.objects.filter(user=self.request.user, ordered=False)
         id = self.request.GET.get('id','')
         total = id.split("!")[1]
 
@@ -49,7 +49,8 @@ class CheckoutView(View):
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
+            all_orders = OrderItem.objects.filter(user=self.request.user, ordered=False)
+
             if form.is_valid():
                 street_address = form.cleaned_data.get('street_address')
                 grand_total = self.request.POST.get('grand_total')
@@ -66,8 +67,11 @@ class CheckoutView(View):
                     zip=zip
                 )
                 checkout_address.save()
-                order.checkout_address = checkout_address
-                order.save()
+
+                for obj in all_orders:
+                    order = OrderItem.objects.get(id=obj.id)
+                    order.checkout_address = checkout_address
+                    order.save()
 
                 if payment_option == 'S':
                     return redirect('payment', payment_option='stripe',id='AGYUVSGH!'+grand_total+'!SGDDF')
@@ -81,13 +85,15 @@ class CheckoutView(View):
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
-        order = OrderItem.objects.get(user=self.request.user, ordered=False)
+        order = OrderItem.objects.filter(user=self.request.user, ordered=False)
         id = kwargs.get('id')
         grand_total = id.split("!")[1]
+
         context = {
             'order': order,
             'grand_total':grand_total
         }
+
         return render(self.request, "core/payment2.html", context)
 
     def post(self,request, *args, **kwargs):
@@ -186,10 +192,12 @@ def add_to_cart(request, pk,quantity):
     if order_qs.exists():
         order = order_qs[0]
 
+        new_quantity = 0
+
         if order.items.filter(product_info__pk=item.pk).exists():
-            order_item.quantity += int(quantity)
+            prv_quantity = int(order_item.quantity)
+            new_quantity =  prv_quantity + int(quantity)
             order_item.save()
-            messages.info(request, "Added quantity Item")
             return redirect("order-summary")
         else:
             order.items.add(order_item)
