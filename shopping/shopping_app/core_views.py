@@ -36,19 +36,23 @@ class CheckoutView(View):
     def get(self, *args, **kwargs):
         form = CheckoutForm()
         order = Order.objects.get(user=self.request.user, ordered=False)
+        id = self.request.GET.get('id','')
+        total = id.split("!")[1]
+
         context = {
             'form': form,
-            'order': order
+            'order': order,
+            'total':total
         }
         return render(self.request, 'site/checkout.html', context)
 
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
-        
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             if form.is_valid():
                 street_address = form.cleaned_data.get('street_address')
+                grand_total = self.request.POST.get('grand_total')
                 apartment_address = form.cleaned_data.get('apartment_address')
                 country = form.cleaned_data.get('country')
                 zip = form.cleaned_data.get('zip')
@@ -66,7 +70,7 @@ class CheckoutView(View):
                 order.save()
 
                 if payment_option == 'S':
-                    return redirect('payment', payment_option='stripe')
+                    return redirect('payment', payment_option='stripe',id='AGYUVSGH!'+grand_total+'!SGDDF')
                 else:
                     messages.warning(self.request, "Invalid Payment option")
                     return redirect('checkout')
@@ -77,17 +81,27 @@ class CheckoutView(View):
 
 class PaymentView(View):
     def get(self, *args, **kwargs):
-        order = Order.objects.get(user=self.request.user, ordered=False)
+        order = OrderItem.objects.get(user=self.request.user, ordered=False)
+        id = kwargs.get('id')
+        grand_total = id.split("!")[1]
         context = {
-            'order': order
+            'order': order,
+            'grand_total':grand_total
         }
         return render(self.request, "core/payment2.html", context)
 
     def post(self,request, *args, **kwargs):
         try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
+            all_orders = OrderItem.objects.filter(user=self.request.user, ordered=False)
 
-            amount = int(order.get_total_price() * 100)  #cents
+            id = kwargs.get('id')
+            amount = id.split("!")[1]
+
+            # assign payment to order
+            for obj in all_orders:
+                order = OrderItem.objects.get(user=self.request.user, product_info=obj.product_info)
+                order.ordered = True
+                order.save()
 
             charge = stripe.Charge.create(
                 amount=amount,
@@ -110,13 +124,8 @@ class PaymentView(View):
             payment = Payment()
             payment.stripe_id = charge['id']
             payment.user = self.request.user
-            payment.amount = order.get_total_price()
+            payment.amount = amount
             payment.save()
-
-            # assign payment to order
-            order.ordered = True
-            order.payment = payment
-            order.save()
 
             messages.success(self.request, "Success make an order")
             return redirect('/')

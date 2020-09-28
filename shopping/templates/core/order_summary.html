@@ -45,10 +45,10 @@
                                 </td>
                                 <td>
                                 {% if order_item.product_info.discount_price %}
-                                    <span class="itm_total">{{ order_item.get_total_price }}</span>
+                                    $ <span class="itm_total">{{ order_item.get_total_price }}</span>
                                     <span class="badge badge-success" >Saved ${{ order_item.get_amount_saved }}</span>
                                 {% else %}
-                                    <span class="itm_total">${{ order_item.get_total_item_price}}</span>
+                                    $ <span class="itm_total">{{ order_item.get_total_item_price }}</span>
                                 {% endif %}
                                  <a href="/remove-from-cart/{{order_item.product_info.pk}}">
                                     <i class="fa fa-trash-o" style="font-size:29px;color:red"></i>
@@ -103,7 +103,7 @@ $(".itm_total").each(function() {
 $("#grand_total").html(total);
 
 function checkout(){
-    window.location.href = '/checkout/';
+    window.location.href = '/checkout/?id=AAHSTD12!'+total+'!BHSGD';
 }
 </script>
 

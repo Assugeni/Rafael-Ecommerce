@@ -1,5 +1,5 @@
 {% extends 'base/skeleton.html' %}
-
+{% load custom_filters %}
 {% block custom_css %}
 <style>
 
@@ -114,7 +114,7 @@ button:hover {
             <script src="https://js.stripe.com/v3/"></script>
 <!--            STRIPE TEST-->
             <div class="new-card-form">
-              <form action="." method="post" class="stripe-form" id="stripe-form">
+              <form action="/payment/stripe/AGYUVSGH!{{grand_total}}!SGDDF" method="post" class="stripe-form" id="stripe-form">
                   {% csrf_token %}
                   <div class="stripe-form-row" id="creditCard">
                       <label for="card-element" id="stripeBtnLabel">
@@ -159,10 +159,10 @@ button:hover {
             {% for order_item in order.items.all %}
             <li class="list-group-item d-flex justify-content-between lh-condensed">
               <div>
-                <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.item.item_name }}</h6>
-                <small class="text-muted">{{ order_item.item.description }}</small>
+                <h6 class="my-0">{{ order_item.quantity }} x {{ order_item.product_info.product_title }}</h6>
+                <small class="text-muted">{{ order_item.product_info.description }}</small>
               </div>
-              <span class="text-muted">{{ order_item.get_final_price }}</span>
+              <span class="text-muted">{{ order_item.product_info.price|calculate_disc:order_item.product_info.discount_price }}</span>
             </li>
             {% endfor %}
            
@@ -176,7 +176,7 @@ button:hover {
             </li> {% endcomment %}
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (USD)</span>
-              <strong>{{ order.get_total_price }}</strong>
+              <strong>${{ grand_total }}</strong>
             </li>
           </ul>
           <!-- Cart -->
