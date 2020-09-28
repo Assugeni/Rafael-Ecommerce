@@ -19,6 +19,11 @@ class ProductView(DetailView):
     model = ProductInfo
     template_name = "site/product-details.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductView, self).get_context_data(**kwargs)
+        context['related_products'] = ProductInfo.objects.all().order_by('?')[:4]
+        return context
+
 
 def CategoryDetailPageView(request):
     category = request.GET.get('category','')
