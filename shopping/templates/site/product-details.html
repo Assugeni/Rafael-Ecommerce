@@ -56,7 +56,7 @@
                         <div class="product__details__price">
                               {% if object.discount_price %}
                                   <del>${{ object.price }}</del>
-                                  <span style="text-decoration: solid;">${{ object.price|get_rand }}</span>
+                                  <span style="text-decoration: solid;">${{ object.price|calculate_disc:object.discount_price }}.0</span>
                               {% else %}
                                  <span  style="text-decoration: solid;">${{ object.price }}</span>
                               {% endif %}
@@ -67,10 +67,11 @@
                             <div class="quantity">
                                 <span>Quantity:</span>
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input id="quantity" type="text" value="1">
                                 </div>
                             </div>
-                            <a href="{{ object.get_add_to_cart_url }}" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a>
+<!--                            /add-to-cart/12/-->
+                            <button style="border: none;" id="add_cart" class="cart-btn"><span class="icon_bag_alt"></span>Add to cart</button>
 
                             <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
@@ -204,3 +205,16 @@
     <!-- Product Details Section End -->
 
 {% endblock content %}
+{% block custom_js %}
+<script>
+
+    $("#add_cart").click(function() {
+        console.log("clicked");
+        var quantity = $("#quantity").val();
+        window.location.href = '/add-to-cart/{{object.id}}/'+quantity;
+    });
+
+</script>
+
+
+{% endblock %}

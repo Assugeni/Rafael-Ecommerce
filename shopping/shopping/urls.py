@@ -53,7 +53,7 @@ urlpatterns = [
     path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('payment/<payment_option>/', PaymentView.as_view(), name='payment'),
-    path('add-to-cart/<pk>/', add_to_cart, name='add-to-cart'),
+    path('add-to-cart/<pk>/<quantity>', add_to_cart, name='add-to-cart'),
     path('remove-from-cart/<pk>/', remove_from_cart, name='remove-from-cart'),
     path('reduce-quantity-item/<pk>/', reduce_quantity_item, name='reduce-quantity-item'),
 

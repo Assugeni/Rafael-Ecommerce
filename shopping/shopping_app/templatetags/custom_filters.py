@@ -37,7 +37,13 @@ def get_cat_items(category):
 
 @register.filter
 def get_rand(num):
-    return random.randint(10,num)
+    return random.randint(10,num)\
+
+@register.filter
+def calculate_disc(price,discount_price):
+    discount_amount = (discount_price * price)/100
+    return int(price - discount_amount)
+
 
 @register.filter
 def getrandcategory(num):

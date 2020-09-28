@@ -1,6 +1,8 @@
 {% extends 'base/skeleton.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block content %}
+
 
     <!-- Breadcrumb Begin -->
     {% include 'includes/sub_header.html' with title='Shopping-Cart' %}
@@ -29,11 +31,11 @@
                                 <td>{{ order_item.product_info.product_title }}</td>
                                 <td>
                                 {% if order_item.product_info.discount_price %}
-                                    <del>${{ order_item.product_info.price}}</del>
-                                    ${{ order_item.product_info.discount_price }}
-                                {% else %}
-                                    ${{ order_item.product_info.price}}
-                                {% endif %}
+                                  <del>${{ order_item.product_info.price }}</del>
+                                  ${{ order_item.product_info.price|calculate_disc:order_item.product_info.discount_price }}
+                              {% else %}
+                                 ${{ order_item.product_info.price }}
+                              {% endif %}
 
                                 </td>
                                 <td>
@@ -43,13 +45,13 @@
                                 </td>
                                 <td>
                                 {% if order_item.product_info.discount_price %}
-                                    ${{ order_item.get_discount_item_price }}
+                                    <span class="itm_total">{{ order_item.get_total_price }}</span>
                                     <span class="badge badge-success" >Saved ${{ order_item.get_amount_saved }}</span>
                                 {% else %}
-                                    ${{ order_item.get_total_item_price}}
+                                    <span class="itm_total">${{ order_item.get_total_item_price}}</span>
                                 {% endif %}
-                                 <a href="remove-from-cart/{{order_item.product_info.pk}}">
-                                    <i class="fas fa-trash float-right text-danger"></i>
+                                 <a href="/remove-from-cart/{{order_item.product_info.pk}}">
+                                    <i class="fa fa-trash-o" style="font-size:29px;color:red"></i>
                                  </a>
 
                                 </td>
@@ -74,11 +76,11 @@
             {% if object.get_total_price %}
                 <tr>
                     <td colspan="4"><b>Total Order Price</b></td>
-                    <td>${{ object.get_total_price }}</td>
+                    <td>$ <span id="grand_total">{{object.price}}</span></td>
                 </tr>
                  <tr>
                     <td colspan="5">
-                        <a href="/checkout" class="btn btn-warning float-right ml-2">Checkout</a>
+                        <button onclick="checkout()" class="btn btn-warning float-right ml-2">Checkout</button>
                         <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
                     </td>
                 </tr>
@@ -88,5 +90,21 @@
         </div>
     </section>
     <!-- Shop Cart Section End -->
+
+{% endblock %}
+{% block custom_js %}
+<script>
+
+total = 0;
+$(".itm_total").each(function() {
+    var val = $(this).html();
+    total = total + parseInt(val);
+});
+$("#grand_total").html(total);
+
+function checkout(){
+    window.location.href = '/checkout/';
+}
+</script>
 
 {% endblock %}

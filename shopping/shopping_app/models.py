@@ -94,11 +94,16 @@ class OrderItem(models.Model):
     def get_total_item_price(self):
         return self.quantity * self.product_info.price
 
+    def get_total_price(self):
+        discount_amount = (self.product_info.discount_price * self.product_info.price) / 100
+        total = (self.product_info.price - discount_amount) * self.quantity
+        return int(total)
+
     def get_discount_item_price(self):
         return self.quantity * self.product_info.discount_price
 
     def get_amount_saved(self):
-        return self.get_total_item_price() - self.get_discount_item_price()
+        return (self.product_info.discount_price * self.product_info.price) / 100
 
     def get_final_price(self):
         if self.product_info.discount_price:
