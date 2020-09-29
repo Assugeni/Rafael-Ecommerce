@@ -174,7 +174,7 @@ Staging, for running a new build of the app in a production-like setting before 
 6. Then run app using command:
     python manage.py runserver
     
-Open link : http://127.0.0.1:5000/
+Open link : http://127.0.0.1:8000/
 
 ## Credits
 
