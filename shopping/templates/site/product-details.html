@@ -75,7 +75,7 @@
 
                             <ul>
                                 <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+<!--                                <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>-->
                             </ul>
                         </div>
                         <div class="product__details__widget">
@@ -209,7 +209,6 @@
 <script>
 
     $("#add_cart").click(function() {
-        console.log("clicked");
         var quantity = $("#quantity").val();
         window.location.href = '/add-to-cart/{{object.id}}/'+quantity;
     });

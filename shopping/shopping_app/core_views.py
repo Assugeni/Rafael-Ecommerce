@@ -59,14 +59,23 @@ class CheckoutView(View):
                 zip = form.cleaned_data.get('zip')
                 payment_option = form.cleaned_data.get('payment_option')
 
-                checkout_address = CheckoutAddress(
-                    user=self.request.user,
-                    street_address=street_address,
-                    apartment_address=apartment_address,
-                    country=country,
-                    zip=zip
-                )
-                checkout_address.save()
+                checkout = CheckoutAddress.objects.filter(user=self.request.user)
+                if checkout.count() == 0:
+                    checkout_address = CheckoutAddress(
+                        user=self.request.user,
+                        street_address=street_address,
+                        apartment_address=apartment_address,
+                        country=country,
+                        zip=zip
+                    )
+                    checkout_address.save()
+                else:
+                    checkout_address = CheckoutAddress.objects.get(user=self.request.user)
+                    checkout_address.street_address = street_address
+                    checkout_address.apartment_address = apartment_address
+                    checkout_address.country = country
+                    checkout_address.zip = zip
+                    checkout_address.save()
 
                 for obj in all_orders:
                     order = OrderItem.objects.get(id=obj.id)
@@ -97,17 +106,22 @@ class PaymentView(View):
         return render(self.request, "core/payment2.html", context)
 
     def post(self,request, *args, **kwargs):
-        try:
+        # try:
             all_orders = OrderItem.objects.filter(user=self.request.user, ordered=False)
+
 
             id = kwargs.get('id')
             amount = id.split("!")[1]
 
             # assign payment to order
             for obj in all_orders:
-                order = OrderItem.objects.get(user=self.request.user, product_info=obj.product_info)
+                order = OrderItem.objects.get(id=obj.id)
                 order.ordered = True
                 order.save()
+
+            checkout_address = CheckoutAddress.objects.filter(user=self.request.user)
+
+
 
             charge = stripe.Charge.create(
                 amount=amount,
@@ -117,11 +131,11 @@ class PaymentView(View):
                 shipping={
                     'name': 'test_user',
                     'address': {
-                        'line1': "",
-                        'postal_code': "",
+                        'line1': checkout_address[0].street_address,
+                        'postal_code': checkout_address[0].zip,
                         'city': "",
                         'state': "",
-                        'country': "",
+                        'country': checkout_address[0].country,
                     }
                 },
             )
@@ -136,43 +150,43 @@ class PaymentView(View):
             messages.success(self.request, "Success make an order")
             return redirect('/')
 
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            messages.error(self.request, f"{err.get('message')}")
-            return redirect('/')
-
-        except stripe.error.RateLimitError as e:
-            # Too many requests made to the API too quickly
-            messages.error(self.request, "To many request error")
-            return redirect('/')
-
-        except stripe.error.InvalidRequestError as e:
-            # Invalid parameters were supplied to Stripe's API
-            messages.error(self.request, "Invalid Parameter")
-            return redirect('/')
-
-        except stripe.error.AuthenticationError as e:
-            # Authentication with Stripe's API failed
-            # (maybe you changed API keys recently)
-            messages.error(self.request, "Authentication with stripe failed")
-            return redirect('/')
-
-        except stripe.error.APIConnectionError as e:
-            # Network communication with Stripe failed
-            messages.error(self.request, "Network Error")
-            return redirect('/')
-
-        except stripe.error.StripeError as e:
-            # Display a very generic error to the user, and maybe send
-            # yourself an email
-            messages.error(self.request, "Something went wrong")
-            return redirect('/')
-
-        except Exception as e:
-            # Something else happened, completely unrelated to Stripe
-            messages.error(self.request, "Not identified error")
-            return redirect('/')
+        # except stripe.error.CardError as e:
+        #     body = e.json_body
+        #     err = body.get('error', {})
+        #     messages.error(self.request, f"{err.get('message')}")
+        #     return redirect('/')
+        #
+        # except stripe.error.RateLimitError as e:
+        #     # Too many requests made to the API too quickly
+        #     messages.error(self.request, "To many request error")
+        #     return redirect('/')
+        #
+        # except stripe.error.InvalidRequestError as e:
+        #     # Invalid parameters were supplied to Stripe's API
+        #     messages.error(self.request, "Invalid Parameter")
+        #     return redirect('/')
+        #
+        # except stripe.error.AuthenticationError as e:
+        #     # Authentication with Stripe's API failed
+        #     # (maybe you changed API keys recently)
+        #     messages.error(self.request, "Authentication with stripe failed")
+        #     return redirect('/')
+        #
+        # except stripe.error.APIConnectionError as e:
+        #     # Network communication with Stripe failed
+        #     messages.error(self.request, "Network Error")
+        #     return redirect('/')
+        #
+        # except stripe.error.StripeError as e:
+        #     # Display a very generic error to the user, and maybe send
+        #     # yourself an email
+        #     messages.error(self.request, "Something went wrong")
+        #     return redirect('/')
+        #
+        # except Exception as e:
+        #     # Something else happened, completely unrelated to Stripe
+        #     messages.error(self.request, "Not identified error")
+        #     return redirect('/')
 
 
 @login_required
