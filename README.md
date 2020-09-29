@@ -1,6 +1,6 @@
 # Rafael Ecommerce - Milestone Project 
 
-This project is dedicated to users who are willing to buy and sell thier goods through internet, and the transfer of money and data to execute these transactions
+This project is dedicated to users who are willing to buy and sell their goods through internet, and the transfer of money and data to execute these transactions.
 It contains various categories like clothes, cosmetics, accessories etc.
  
 ## UX
